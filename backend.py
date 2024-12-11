@@ -11,7 +11,6 @@ def receive_data():
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
 
-    # 假设我们期望接收到一个包含'task'键的JSON对象
     task = data.get('task')
 
     if not task:
