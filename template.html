@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cluster Management</title>
+    <script>
+        function updateData() {
+            fetch('/update')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('task-table-body');
+                    tableBody.innerHTML = ''; // 清空旧的数据
+                    data.forEach(task => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${task.task_id}</td>
+                            <td>${task.cpu_number}</td>
+                            <td>${task.memory}</td>
+                            <td>${task.status}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 页面加载时立即更新一次
+        window.onload = function() {
+            updateData();
+            // 每隔5秒更新一次数据
+            setInterval(updateData, 5000);
+        };
+    </script>
+</head>
+<body>
+    <body background="w.png">
+    <h1>输入任务</h1>
+    <form action="/" method="POST">
+        <label for="Lsystem">system类容器:</label><br>
+        <input type="text" id="Lsystem" name="Lsystem"><br>
+        <label for="Llanguage">language类容器:</label><br>
+        <input type="text" id="Llanguage" name="Llanguage"><br>
+        <label for="Lwork">work类容器:</label><br>
+        <input type="text" id="Lwork" name="Lwork"><br>
+        
+        <label for="cpu">CPU:</label><br>
+        <input type="text" id="cpu" name="cpu"><br>
+        
+        <label for="memory">MEMORY:</label><br>
+        <input type="text" id="memory" name="memory"><br>
+
+        <input type="submit" value="提交">
+    </form>
+
+    <h2>任务信息</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CPU</th>
+                <th>MEMORY</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        <tbody id="task-table-body">
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.task_id }}</td>
+                <td>{{ task.cpu_number }}</td>
+                <td>{{ task.memory }}</td>
+                <td>{{ task.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
